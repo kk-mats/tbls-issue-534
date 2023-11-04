@@ -9,4 +9,5 @@ relations:
     parentTable: user
     parentColumns:
       - id
+    parentCardinality: exactly one
 
