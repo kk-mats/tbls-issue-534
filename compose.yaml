@@ -1,0 +1,37 @@
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+    volumes:
+      - type: bind
+        read_only: true
+        source: ./db.sql
+        target: /docker-entrypoint-initdb.d/db.sql
+    healthcheck:
+      test: mysqladmin ping -proot
+      interval: 3s
+      timeout: 10s
+      retries: 10
+      start_period: 5s
+
+  tbls:
+    image: k1low/tbls
+    command:
+      - -c
+      - /.tbls.yaml
+      - doc
+      - -f
+      - mysql://root:root@mysql:3306/db
+      - /doc
+    volumes:
+      - type: bind
+        read_only: true
+        source: ./.tbls.yaml
+        target: /.tbls.yaml
+      - type: bind
+        source: ./doc
+        target: /doc
+    depends_on:
+      - mysql

@@ -1,0 +1,12 @@
+er:
+  format: mermaid
+relations:
+  - table: address
+    columns:
+      - user_id
+    cardinality: exactly one
+    override: true
+    parentTable: user
+    parentColumns:
+      - id
+
